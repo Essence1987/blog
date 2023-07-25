@@ -69,6 +69,24 @@ async function startApp() {
   await testDatabaseConnection();
   await syncModels();
 
+// Routes
+const authRoutes = require('./routes/authRoutes');
+app.use('/auth', authRoutes);
+
+// Home Route
+app.get('/', async (req, res) => {
+    res.render('home');
+});
+
+// Dashboard Route
+app.get('/dashboard', async (req, res) => {
+    if (!req.session.user) {
+        res.render('dashboard', { user: req.session.user });
+} else {
+    res.redirect('/auth/login');
+}
+});
+
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
