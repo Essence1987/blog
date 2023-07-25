@@ -69,6 +69,9 @@ async function startApp() {
   await testDatabaseConnection();
   await syncModels();
 
+// Require authMiddleware
+const authMiddleware = require('./middleware/authMiddleware');
+
 // Routes
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
@@ -78,13 +81,9 @@ app.get('/', async (req, res) => {
     res.render('home');
 });
 
-// Dashboard Route
-app.get('/dashboard', async (req, res) => {
-    if (!req.session.user) {
-        res.render('dashboard', { user: req.session.user });
-} else {
-    res.redirect('/auth/login');
-}
+// Dashboard Route (protected by authMiddleware that requires authentication)
+app.get('/dashboard', authMiddleware.checkAuth, (req, res) => {
+  res.render('dashboard', { user: req.session.user });
 });
 
   app.listen(PORT, () => {
