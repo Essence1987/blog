@@ -1,4 +1,5 @@
 const express = require('express');
+const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
@@ -18,6 +19,13 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Set up Handlebars as the view engine
+app.engine('handlebars', expressHandlebars({
+    defaultLayout: 'main',
+    })
+);
+app.set('view engine', 'handlebars');
 
 // Session setup
 app.use(
