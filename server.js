@@ -3,12 +3,12 @@ const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
-const sequelize = require('./config/database');
+const sequelize = require('./db/database');
 
 // Import models
-const User = require('./models/User');
-const BlogPost = require('./models/BlogPost');
-const Comment = require('./models/Comment');
+const User = require('./db/models/User');
+const BlogPost = require('./db/models/BlogPost');
+const Comment = require('./db/models/Comment');
 
 // Load environment variables
 dotenv.config();
