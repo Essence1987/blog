@@ -3,7 +3,7 @@ const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
-const sequelize = require('./db/database');
+const sequelize = require('./config/database');
 
 // Import models
 const User = require('./db/models/User');
@@ -36,14 +36,6 @@ app.use(
   })
 );
 
-// Set up models with associations
-User.hasMany(BlogPost, { onDelete: 'CASCADE', hooks: true });
-User.hasMany(Comment, { onDelete: 'CASCADE', hooks: true });
-BlogPost.belongsTo(User, { foreignKey: 'userId', allowNull: false });
-BlogPost.hasMany(Comment, { onDelete: 'CASCADE', hooks: true });
-Comment.belongsTo(User, { foreignKey: 'userId', allowNull: false });
-Comment.belongsTo(BlogPost, { foreignKey: 'blogPostId', allowNull: false });
-
 // Test the database connection
 async function testDatabaseConnection() {
   try {
@@ -68,6 +60,9 @@ async function syncModels() {
 async function startApp() {
   await testDatabaseConnection();
   await syncModels();
+
+// Set up associations
+  setupAssociations();
 
 // Require authMiddleware
 const authMiddleware = require('./middleware/authMiddleware');

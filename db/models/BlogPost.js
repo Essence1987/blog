@@ -1,6 +1,7 @@
 const {sequelize, DataTypes} = require('sequelize');
-const database = require('../config/database');
+const database = require('../../config/database');
 const User = require('./User');
+const Comment = require('./Comment');
 
 const BlogPost = database.define('BlogPost', {
     id: {
@@ -25,9 +26,5 @@ const BlogPost = database.define('BlogPost', {
         allowNull: false,
     }
 });
-
-// Define associations
-BlogPost.belongsTo(User, {foreignKey: 'userId', allowNull: false});
-BlogPost.hasMany(Comment, { onDelete: 'CASCADE', hooks: true });
 
 module.exports = BlogPost;
